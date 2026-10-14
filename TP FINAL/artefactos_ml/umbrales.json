@@ -1,0 +1,6 @@
+{
+ "Regresi\u00f3n log\u00edstica": 0.13,
+ "Random Forest": 0.14999999999999997,
+ "XGBoost": 0.145,
+ "CatBoost": 0.145
+}

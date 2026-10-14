@@ -1,0 +1,155 @@
+{
+ "presupuesto": {
+  "Regresi\u00f3n log\u00edstica": 16,
+  "Random Forest": 60,
+  "XGBoost": 60,
+  "CatBoost": 60
+ },
+ "mecanismos": [
+  "Grilla",
+  "Aleatoria",
+  "Optuna (TPE)"
+ ],
+ "semillas_carrera": [
+  42
+ ],
+ "max_arboles": {
+  "XGBoost": 2000,
+  "CatBoost": 3000
+ },
+ "early_stopping_rounds": 50,
+ "espacios": {
+  "Regresi\u00f3n log\u00edstica": {
+   "C": [
+    "logfloat",
+    0.0001,
+    100.0
+   ],
+   "l1_ratio": [
+    "cat",
+    [
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  "Random Forest": {
+   "max_features": [
+    "float",
+    0.1,
+    0.8
+   ],
+   "min_samples_leaf": [
+    "logint",
+    1,
+    300
+   ],
+   "max_depth": [
+    "int",
+    4,
+    40
+   ]
+  },
+  "XGBoost": {
+   "learning_rate": [
+    "logfloat",
+    0.005,
+    0.3
+   ],
+   "max_depth": [
+    "int",
+    2,
+    8
+   ],
+   "subsample": [
+    "float",
+    0.5,
+    1.0
+   ],
+   "colsample_bytree": [
+    "float",
+    0.4,
+    1.0
+   ],
+   "min_child_weight": [
+    "int",
+    1,
+    15
+   ],
+   "reg_lambda": [
+    "logfloat",
+    0.001,
+    20.0
+   ],
+   "reg_alpha": [
+    "logfloat",
+    0.001,
+    10.0
+   ]
+  },
+  "CatBoost": {
+   "learning_rate": [
+    "logfloat",
+    0.02,
+    0.3
+   ],
+   "depth": [
+    "int",
+    3,
+    9
+   ],
+   "l2_leaf_reg": [
+    "logfloat",
+    1.0,
+    30.0
+   ],
+   "random_strength": [
+    "logfloat",
+    0.1,
+    5.0
+   ]
+  }
+ },
+ "ganadores": {
+  "Regresi\u00f3n log\u00edstica": {
+   "mecanismo": "Aleatoria",
+   "hiperparametros": {
+    "C": 0.010051981180656781,
+    "l1_ratio": 1.0
+   },
+   "roc_auc_carrera": 0.6705366680319422
+  },
+  "Random Forest": {
+   "mecanismo": "Optuna (TPE)",
+   "hiperparametros": {
+    "max_features": 0.4149670947833069,
+    "min_samples_leaf": 14,
+    "max_depth": 10
+   },
+   "roc_auc_carrera": 0.6810853718252368
+  },
+  "XGBoost": {
+   "mecanismo": "Grilla",
+   "hiperparametros": {
+    "learning_rate": 0.02,
+    "max_depth": 6,
+    "min_child_weight": 3,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_lambda": 1.0,
+    "reg_alpha": 0.01
+   },
+   "roc_auc_carrera": 0.6808724109238637
+  },
+  "CatBoost": {
+   "mecanismo": "Aleatoria",
+   "hiperparametros": {
+    "learning_rate": 0.02385264834812575,
+    "depth": 6,
+    "l2_leaf_reg": 24.64598838968805,
+    "random_strength": 0.905753009913039
+   },
+   "roc_auc_carrera": 0.6820527939927812
+  }
+ }
+}
