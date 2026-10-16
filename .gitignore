@@ -2,3 +2,7 @@ prompt_maestro*
 PROMPT MAESTRO*
 .DS_Store
 __pycache__/
+
+# Estado de sesión entre notebooks (pesado, se regenera al correrlos)
+TP FINAL/artefactos_ml/estado_*.pkl
+catboost_info/
