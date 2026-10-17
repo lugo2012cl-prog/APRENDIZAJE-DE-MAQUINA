@@ -17,7 +17,7 @@ NOTEBOOKS = [RAIZ / f"{n}.ipynb" for n in
 ARTEFACTOS = RAIZ / "artefactos_ml"
 
 st.set_page_config(
-    page_title="Diabetes 130-US Hospitals — TP Aprendizaje de Máquina",
+    page_title="Diabetes 130-US Hospitals: TP Aprendizaje de Máquina",
     page_icon="🤖",
     layout="wide",
 )
@@ -100,12 +100,22 @@ NOMBRE_ETAPA = {0: "enganche", 1: "basal", 2: "definición", 3: "validación", 4
 # ----------------------------------------------------------------------------
 # Lectura del notebook
 # ----------------------------------------------------------------------------
+def es_de_enlace(celda):
+    """Celdas que solo unen un notebook con el siguiente (portada, cierre y guardado o carga de la sesión)."""
+    fuente = "".join(celda["source"])
+    if celda["cell_type"] == "code":
+        return "dill." in fuente
+    primera = fuente.lstrip("-\n ").split("\n")[0]
+    return bool(re.match(r"(# Notebook \d de 4|## Cierre del notebook|### Estado de la sesión)", primera))
+
+
 @st.cache_data(show_spinner="Cargando…")
 def cargar_notebook():
     celdas = []
     for ruta in NOTEBOOKS:  # los cuatro notebooks, en orden, se leen como uno solo
         with open(ruta, encoding="utf-8") as f:
             celdas += json.load(f)["cells"]
+    celdas = [c for c in celdas if not es_de_enlace(c)]
     fuentes = ["".join(c["source"]) for c in celdas]
     inicios = []
     for _, enc in SECCIONES:
@@ -126,7 +136,7 @@ def csv(nombre):
 
 def limpiar(t):
     """Quita las referencias M0..M10 y la numeración de secciones del modelado."""
-    t = re.sub(r"^(#+)\s+8\.\d+(\.\d+)*\s+(M\d+\s+—\s+)?", r"\1 ", t, flags=re.M)
+    t = re.sub(r"^(#+)\s+8\.\d+(\.\d+)*\s+(M\d+(?::|\s+—)\s+)?", r"\1 ", t, flags=re.M)
     t = re.sub(r"^#\s+8\.\s+", "# ", t, flags=re.M)
     t = re.sub(r"\b(?:de|en|a|con|la|el|sección)\s+(?:la\s+)?sección 8\.3\.1", "la etapa de validación", t)
     t = t.replace("la sección 8.3.1", "la etapa de validación").replace("en 8.9", "en la etapa de test final")
@@ -463,7 +473,7 @@ def seccion_enganche(celdas):
     with c2:
         st.markdown("**Costo de un ajuste (segundos, un fold)**")
         t = pd.DataFrame({"algoritmo": ["Regresión logística", "Random Forest", "XGBoost", "CatBoost"],
-                          "segundos": [0.0, 2.1, 1.1, 3.0]})
+                          "segundos": [0.0, 1.8, 1.1, 2.8]})
         fig = px.bar(t, x="algoritmo", y="segundos", color="algoritmo", color_discrete_map=PALETA, text_auto=".1f")
         fig.update_layout(height=290, showlegend=False, xaxis_title="", margin=dict(t=10))
         st.plotly_chart(fig, width="stretch")
@@ -525,7 +535,7 @@ def extra_m5():
 
 def extra_m7():
     st.markdown("---")
-    st.subheader("🔎 ROC-AUC por fold (20 folds) — interactivo")
+    st.subheader("🔎 ROC-AUC por fold (20 folds), interactivo")
     f = csv("m7_folds.csv")
     metrica = st.radio("Métrica", ["ROC-AUC", "AUC-PR"], horizontal=True, key="m7_met")
     fig = px.box(f, x="modelo", y=metrica, color="modelo", points="all", color_discrete_map=PALETA,
@@ -538,7 +548,7 @@ def extra_m7():
 
 def extra_m9():
     st.markdown("---")
-    st.subheader("🔎 Métricas en el test con intervalo de confianza (95 %) — interactivo")
+    st.subheader("🔎 Métricas en el test con intervalo de confianza (95 %), interactivo")
     ic = csv("m9_resultados_test_ic.csv")
     metrica = st.radio("Métrica", ic["metrica"].unique().tolist(), horizontal=True, key="m9_met")
     s = ic[ic["metrica"] == metrica]
@@ -569,7 +579,7 @@ def extra_m9():
                        labels=dict(x="Predicho", y="Real"))
     fig_cm.update_traces(text=textos, texttemplate="%{text}", textfont_size=16)
     fig_cm.update_layout(height=400, width=540, coloraxis_showscale=False,
-                         title=f"{cm['modelo']} en el conjunto de prueba — umbral {str(round(cm['umbral'], 2)).replace('.', ',')}")
+                         title=f"{cm['modelo']} en el conjunto de prueba, umbral {str(round(cm['umbral'], 2)).replace('.', ',')}")
     st.plotly_chart(fig_cm, width="content")
 
 
@@ -579,7 +589,7 @@ EXTRAS = {"Validación": extra_validacion, "Hiperparámetros": extra_m5,
 # ----------------------------------------------------------------------------
 # Página
 # ----------------------------------------------------------------------------
-st.title("Diabetes 130-US Hospitals — TP Aprendizaje de Máquina")
+st.title("Diabetes 130-US Hospitals: TP Aprendizaje de Máquina")
 st.caption(
     "Predicción del reingreso a 30 días. Continúa el análisis exploratorio del TP de Análisis de Datos con el "
     "modelado de las etapas de aprendizaje de máquina. Cada botón muestra una etapa."
