@@ -58,6 +58,12 @@ notebook siguiente lo carga al empezar. Esos archivos no se suben al repositorio
 `artefactos_ml/m5_carrera_semilla*.pkl` y se cargan en lugar de recalcularse. Aun así, el notebook 3 y el 4 tardan
 unos 15 minutos cada uno.
 
+**6. Versiones.** Con otras versiones de las librerías, otro sistema operativo u otro procesador, los resultados
+pueden variar levemente. Al correr el trabajo en dos computadoras con las mismas versiones, el ROC-AUC cambió
+recién en la cuarta cifra decimal y las cantidades que dependen del umbral algo más, sin cambiar las conclusiones.
+Para obtener los mismos números, usar las versiones de `requirements.txt`. El detalle está al final de M10, en el
+notebook 4.
+
 **Problemas frecuentes**
 
 | Error | Causa | Solución |
