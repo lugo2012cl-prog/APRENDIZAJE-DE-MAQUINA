@@ -12,7 +12,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 RAIZ = Path(__file__).resolve().parent.parent          # carpeta TP FINAL
-NOTEBOOK = RAIZ / "TP_ML_02.ipynb"
+NOTEBOOKS = [RAIZ / f"{n}.ipynb" for n in
+             ["01_EDA_y_seleccion", "02_Planteo_y_basal", "03_Modelos_y_ajuste", "04_Evaluacion_y_conclusiones"]]
 ARTEFACTOS = RAIZ / "artefactos_ml"
 
 st.set_page_config(
@@ -101,8 +102,10 @@ NOMBRE_ETAPA = {0: "enganche", 1: "basal", 2: "definición", 3: "validación", 4
 # ----------------------------------------------------------------------------
 @st.cache_data(show_spinner="Cargando…")
 def cargar_notebook():
-    with open(NOTEBOOK, encoding="utf-8") as f:
-        celdas = json.load(f)["cells"]
+    celdas = []
+    for ruta in NOTEBOOKS:  # los cuatro notebooks, en orden, se leen como uno solo
+        with open(ruta, encoding="utf-8") as f:
+            celdas += json.load(f)["cells"]
     fuentes = ["".join(c["source"]) for c in celdas]
     inicios = []
     for _, enc in SECCIONES:
@@ -589,8 +592,8 @@ st.markdown("---")
 try:
     secciones, celdas_eda = cargar_notebook()
 except (FileNotFoundError, StopIteration):
-    st.error(f"No se pudo leer `{NOTEBOOK.name}` en `{RAIZ}`. El dashboard debe quedar en la carpeta `dashboard_ml/` "
-             "dentro de `TP FINAL`, junto al notebook y a `artefactos_ml/`.")
+    st.error(f"No se pudieron leer los cuatro notebooks en `{RAIZ}`. El dashboard debe quedar en la carpeta "
+             "`dashboard_ml/` dentro de `TP FINAL`, junto a los notebooks y a `artefactos_ml/`.")
     st.stop()
 
 if activa == "EDA":

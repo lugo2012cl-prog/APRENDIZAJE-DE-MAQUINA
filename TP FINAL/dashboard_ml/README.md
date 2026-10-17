@@ -1,13 +1,17 @@
 # Dashboard — TP Aprendizaje de Máquina (Diabetes 130-US Hospitals)
 
 Dashboard en Streamlit que muestra, desde la sección **7.5 Balance de clases** del notebook en adelante, cada etapa
-del modelado (**M0 a M10**) con su botón. Lee directamente `../TP_ML_02.ipynb` (textos, tablas y gráficos con sus
-lecturas) y `../artefactos_ml/` (resultados guardados), por lo que debe quedar en la carpeta `dashboard_ml/` dentro de `TP FINAL`.
+del modelado (**M0 a M10**) con su botón. Lee directamente los cuatro notebooks de `TP FINAL`, en orden (textos,
+tablas y gráficos con sus lecturas), y `../artefactos_ml/` (resultados guardados), por lo que debe quedar en la carpeta
+`dashboard_ml/` dentro de `TP FINAL`. Muestra lo que quedó guardado en los notebooks, así que conviene abrirlo después
+de haberlos corrido.
 
 ## Cómo correrlo
 
+Desde esta carpeta, con el entorno `tp_ml` activado:
+
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 streamlit run app_ml.py
 ```
 
